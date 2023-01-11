@@ -30,15 +30,23 @@ def ttparse(search_name, search_num):
     Session = sessionmaker(bind=db.engine)
     session = Session()
 
-    try:
-        tt_table = session.query(Truthtables) \
-            .filter(Truthtables.name.like(ttname),
-                    Truthtables.seq.like(seqnum)).all()
+    # try:
+    #     tt_table = session.query(Truthtables) \
+    #         .filter(Truthtables.name.like(ttname),
+    #                 Truthtables.seq.like(seqnum)).all()
         
-        tt_table = render_dataframe(tt_table, True)
-        ttparse_form = TruthtableParseForm(prefix='ttparser')
-    except: 
-        SortError = True
+    #     tt_table = render_dataframe(tt_table, True)
+    #     ttparse_form = TruthtableParseForm(prefix='ttparser')
+
+    # except: 
+    #     SortError = True
+
+    tt_table = session.query(Truthtables) \
+    .filter(Truthtables.name.like(ttname),
+                Truthtables.seq.like(seqnum)).all()
+        
+    tt_table = render_dataframe(tt_table, True)
+    ttparse_form = TruthtableParseForm(prefix='ttparser')
     
     if ttparse_form.validate_on_submit() and ttparse_form.submit.data:
         ttname = str(ttparse_form.ttname.data)
@@ -47,9 +55,9 @@ def ttparse(search_name, search_num):
                         search_name=ttname,
                         search_num=seqnum))
 
-    if SortError:
-        flash(
-            f'''{ttname} - Sequence {seqnum} not found. The truthtable name or sequence may be invaild.''')
+    # if SortError:
+    #     flash(
+    #         f'''{ttname} - Sequence {seqnum} not found. The truthtable name or sequence may be invaild.''')
 
     return render_template('ttparser/ttparser.html',
                            ttparse_form=ttparse_form,
