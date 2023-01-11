@@ -327,7 +327,19 @@ def eos_17(eos_mod_1=None,
            eos_mod_6=None,
            eos_mod_7=None,
            eos_mod_8=None):
-        return
+    io = parse_discrete_io(word_num=eos_mod_5,
+                           bit_num=eos_mod_2,
+                           state_num=eos_mod_6)
+
+    input_text = f'''{io.address} is {io.state}'''
+
+    analog_text = parse_analog(analog_num=eos_mod_1, greater_than=True, analog_preset=eos_mod_8)
+
+    unit_text = parse_unit_either_step(unit_num='in current process', step_num1=eos_mod_3, step_num2=eos_mod_4)
+
+    time_text = parse_time(time_preset=eos_mod_7)
+    
+    return f'{analog_text} or {unit_text} or {input_text} and {time_text}.'
 
 
 def eos_20(eos_mod_1=None,
