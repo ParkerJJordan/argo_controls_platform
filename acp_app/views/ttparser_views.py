@@ -30,20 +30,13 @@ def ttparse(search_name, search_num):
     Session = sessionmaker(bind=db.engine)
     session = Session()
 
-    # try:
-    #     tt_table = session.query(Truthtables) \
-    #         .filter(Truthtables.name.like(ttname),
-    #                 Truthtables.seq.like(seqnum)).all()
-        
-    #     tt_table = render_dataframe(tt_table, True)
-    #     ttparse_form = TruthtableParseForm(prefix='ttparser')
-
-    # except: 
-    #     SortError = True
-
-    tt_table = session.query(Truthtables) \
-    .filter(Truthtables.name.like(ttname),
+    try:
+        tt_table = session.query(Truthtables) \
+        .filter(Truthtables.name.like(ttname),
                 Truthtables.seq.like(seqnum)).all()
+    except:
+        SortError = True
+        tt_table = pd.DataFrame()
         
     tt_table = render_dataframe(tt_table, True)
     ttparse_form = TruthtableParseForm(prefix='ttparser')
@@ -55,9 +48,9 @@ def ttparse(search_name, search_num):
                         search_name=ttname,
                         search_num=seqnum))
 
-    # if SortError:
-    #     flash(
-    #         f'''{ttname} - Sequence {seqnum} not found. The truthtable name or sequence may be invaild.''')
+    if SortError:
+        flash(
+            f'{ttname} - Sequence {seqnum} not found. The truthtable name or sequence may be invaild.', 'alert-danger')
 
     return render_template('ttparser/ttparser.html',
                            ttparse_form=ttparse_form,
@@ -68,7 +61,6 @@ def ttparse(search_name, search_num):
 
 @bp.cli.command('init')
 def load_truthtable_db():
-    #tt_path = f'C:/Users/pjordan/TruthtablesTest'
     all_tts = []
     path = f'acp_app/data/raw/gcc'
 
