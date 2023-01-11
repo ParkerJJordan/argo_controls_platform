@@ -135,8 +135,9 @@ def parse_unit_seq_range(unit_num, low_seq, high_seq, in_range=True):
         return f'{unit_num} is not between sequence {low_seq} and {high_seq}'
 
 
-def parse_step_transition(step_num):
-    step_branch.append(step_num)
+def parse_step_transition(step_num, keepxfr=False):
+    step_branch.branch_to.append(step_num)
+    step_branch.keepxfr = keepxfr
     return f'transfer to step {step_num}', step_branch
 
 
@@ -1216,7 +1217,7 @@ def eos_86(eos_mod_1=None,
     analog_text = parse_analog(analog_num=eos_mod_4,
                                 greater_than=eos_mod_5,
                                 analog_preset=eos_mod_8)
-    step_text, step_num = parse_step_transition(step_num=eos_mod_6)
+    step_text, step_num = parse_step_transition(step_num=eos_mod_6, keepxfr=True)
 
     return f'{input_text} then {step_text} or if {analog_text}.'
 
@@ -1235,7 +1236,7 @@ def eos_96(eos_mod_1=None,
     input_text = f'''{io.address} is {io.state}'''
     process_text = parse_process_step_range(process_num=eos_mod_5, low_step=eos_mod_6, high_step=eos_mod_7,in_range=(~eos_mod_4 & 1))
     xfer_to = parse_xfer_on(state_num=(eos_mod_4 << 1))
-    step_text, step_num = parse_step_transition(step_num=eos_mod_8)
+    step_text, step_num = parse_step_transition(step_num=eos_mod_8, keepxfr=True)
     
 
     return f'{input_text} then {step_text} or if {process_text}. Step will {xfer_to}.'
@@ -1244,7 +1245,9 @@ def eos_96(eos_mod_1=None,
 def eos_resolve(eos_type, eos_mod_1, eos_mod_2, eos_mod_3, eos_mod_4,
                 eos_mod_5, eos_mod_6, eos_mod_7, eos_mod_8):
     global step_branch
-    step_branch = []
+    step_branch = namedtuple('branching', ['branch_to', 'keepxfr'])
+    step_branch.branch_to = []
+    step_branch.keepxfr = False
     
     eos_type = int(eos_type)
 
