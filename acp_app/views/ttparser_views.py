@@ -61,12 +61,14 @@ def ttparse(search_name, search_num):
 @bp.cli.command('init')
 def load_truthtable_db():
     #tt_path = f'C:/Users/pjordan/TruthtablesTest'
+    all_tts = []
     path = f'acp_app/data/raw/gcc'
 
     files = Path(path).glob('**/*.xls')
     for file in files:
         truthtable = TruthtableDB(file)
-        tt_master = pd.concat([truthtable.tt])
+        all_tts.append(truthtable.tt)
+    tt_master = pd.concat(all_tts)
 
     tt_master.to_sql('tt_master',
                              db.engine,
