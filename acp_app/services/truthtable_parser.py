@@ -12,8 +12,8 @@ Required Parameters:
 import numpy as np
 import pandas as pd
 from collections import namedtuple
-from acp_app.services.eos_to_english import eos_resolve
-#from eos_to_english import eos_resolve
+#from acp_app.services.eos_to_english import eos_resolve
+from eos_to_english import eos_resolve
 from pathlib import Path
 
 class TruthtableDB():
@@ -125,18 +125,6 @@ class TruthtableDB():
             else:
                 next_sn = self._df.loc[self._df.index[seqrn.seqrow[seqrn.seqnum.index(self._seq_num_lst[idx])]], str(lookup_val)]
                 next_steps.append(str(next_sn))
-
-            # if len(branch_steps.branch_to) == 1:
-            #     next_steps.append(str(branch_to[0]))
-            # elif len(branch_to) > 1:
-            #     branch_text = f'{branch_to[0]}'
-            #     for i in range(len(branch_to)-1):
-            #         branch_text = branch_text + f' or {branch_to[i+1]}'
-            #     next_steps.append(branch_text)
-            # else:
-            #     next_sn = self._df.loc[self._df.index[seqrn.seqrow[seqrn.seqnum.index(self._seq_num_lst[idx])]], str(lookup_val)]
-            #     next_steps.append(str(next_sn))
-
         return next_steps
 
 
@@ -146,8 +134,8 @@ class TruthtableDB():
         eos_english = []
         for lookup_val in self._seq:
             eos_info = list(self._df.loc[self._df.index[list(mod)], str(lookup_val)])
-            step_english = eos_resolve(*eos_info)
-            eos_english.append(step_english[0])
+            step_english, step_not_found, branch_steps = eos_resolve(*eos_info)
+            eos_english.append(step_english)
         return eos_english
 
 
