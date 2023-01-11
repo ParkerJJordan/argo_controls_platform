@@ -1219,6 +1219,52 @@ def eos_80(eos_mod_1=None,
     return f'''{input_text1} and {input_text2}.'''
 
 
+def eos_81(eos_mod_1=None,
+           eos_mod_2=None,
+           eos_mod_3=None,
+           eos_mod_4=None,
+           eos_mod_5=None,
+           eos_mod_6=None,
+           eos_mod_7=None,
+           eos_mod_8=None):
+    # Discrete address
+    io1 = parse_discrete_io(word_num=eos_mod_1,
+                            bit_num=eos_mod_2,
+                            state_num=eos_mod_3)
+    input_text1 = f'''{io1.address} is {io1.state}'''
+
+    io2 = parse_discrete_io(word_num=eos_mod_4,
+                            bit_num=eos_mod_5,
+                            state_num=eos_mod_6)
+    input_text2 = f'''{io2.address} is {io2.state}'''
+
+    return f'''{input_text1} or {input_text2}.'''
+
+
+def eos_82(eos_mod_1=None,
+           eos_mod_2=None,
+           eos_mod_3=None,
+           eos_mod_4=None,
+           eos_mod_5=None,
+           eos_mod_6=None,
+           eos_mod_7=None,
+           eos_mod_8=None):
+    # Discrete address
+    io1 = parse_discrete_io(word_num=eos_mod_1,
+                            bit_num=eos_mod_2,
+                            state_num=eos_mod_3)
+    input_text1 = f'''{io1.address} is {io1.state}'''
+
+    io2 = parse_discrete_io(word_num=eos_mod_4,
+                            bit_num=eos_mod_5,
+                            state_num=eos_mod_6)
+    input_text2 = f'''{io2.address} is {io2.state}'''
+
+    time_text = parse_time(eos_mod_7)
+
+    return f'''{input_text1} and {input_text2} or {time_text}.'''
+
+
 def eos_83(eos_mod_1=None,
            eos_mod_2=None,
            eos_mod_3=None,
@@ -1285,6 +1331,23 @@ def eos_86(eos_mod_1=None,
     step_text, step_num = parse_step_transition(step_num=eos_mod_6, keepxfr=True)
 
     return f'{input_text} then {step_text} or if {analog_text}.'
+
+
+def eos_87(eos_mod_1=None,
+           eos_mod_2=None,
+           eos_mod_3=None,
+           eos_mod_4=None,
+           eos_mod_5=None,
+           eos_mod_6=None,
+           eos_mod_7=None,
+           eos_mod_8=None):
+    analog_text = parse_analog(analog_num=eos_mod_1,
+                                greater_than=eos_mod_2,
+                                analog_preset=eos_mod_8)
+    step_text, step_num = parse_step_transition(step_num=eos_mod_7, keepxfr=True)
+    unit_text = parse_process_step_range(process_num=eos_mod_3, low_step=eos_mod_4, high_step=eos_mod_5, in_range=eos_mod_6)
+
+    return f'{analog_text} then {step_text} or if {unit_text}.'
 
 
 def eos_96(eos_mod_1=None,
