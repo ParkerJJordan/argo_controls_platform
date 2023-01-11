@@ -1075,7 +1075,7 @@ def eos_70(eos_mod_1=None,
 
     analog_text = parse_analog(analog_num=eos_mod_1, greater_than=True, analog_preset=eos_mod_8)
 
-    return f'''{analog_text} or {time_text} and {input_text}.'''
+    return f'''{time_text} and {input_text} or {analog_text}.'''
 
 
 def eos_73(eos_mod_1=None,
@@ -1350,6 +1350,24 @@ def eos_87(eos_mod_1=None,
     return f'{analog_text} then {step_text} or if {unit_text}.'
 
 
+def eos_93(eos_mod_1=None,
+           eos_mod_2=None,
+           eos_mod_3=None,
+           eos_mod_4=None,
+           eos_mod_5=None,
+           eos_mod_6=None,
+           eos_mod_7=None,
+           eos_mod_8=None):
+    analog_text1 = parse_analog(analog_num=eos_mod_1,
+                                greater_than=eos_mod_2,
+                                analog_preset=eos_mod_7)
+    analog_text2 = parse_analog(analog_num=eos_mod_1,
+                                greater_than=eos_mod_2,
+                                analog_preset=eos_mod_8)                            
+
+    return f'{analog_text1} or {analog_text2}.'
+
+
 def eos_96(eos_mod_1=None,
            eos_mod_2=None,
            eos_mod_3=None,
@@ -1368,6 +1386,19 @@ def eos_96(eos_mod_1=None,
 
     return f'{input_text} then {step_text} or if {process_text}. Step will {xfer_to}.'
 
+def eos_97(eos_mod_1=None,
+           eos_mod_2=None,
+           eos_mod_3=None,
+           eos_mod_4=None,
+           eos_mod_5=None,
+           eos_mod_6=None,
+           eos_mod_7=None,
+           eos_mod_8=None):
+    unit_text = parse_process_step_range(process_num=eos_mod_1, low_step=eos_mod_2, high_step=eos_mod_3, unit_count=eos_mod_4, is_greater=eos_mod_5)
+    step_text = parse_step_transition(step_num=eos_mod_6)    
+    time_text = parse_time(eos_mod_7)                        
+
+    return f'{time_text} then {step_text} or {unit_text}.'
 
 def eos_98(eos_mod_1=None,
            eos_mod_2=None,
