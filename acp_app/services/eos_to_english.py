@@ -54,20 +54,25 @@ def parse_time(time_preset):
         return f'the time in step exceeds {mins:.2f} minutes ({secs} seconds)'
 
 
-def parse_process_step_range(process_num, low_step, high_step, in_range=True):
-    # Process number and steps
-    if in_range:
-        return f'any unit of process {process_num} is between steps {low_step} and {high_step}'
-    else:
-        return f'any unit of process {process_num} is not between steps {low_step} and {high_step}'
-
-
 def parse_xfer_on(state_num):
 
     if state_num:
         return f'transfer on DI'
     else:
         return f'transfer on process'
+
+
+def parse_process_step_range(process_num, low_step, high_step, in_range=True, unit_count=0, is_greater=True):
+    # Process number and steps
+    comp_state = {True : 'or more', False: 'or less'}
+    if unit_count == 0:
+        if in_range:
+            return f'any unit of process {process_num} is between steps {low_step} and {high_step}'
+        else:
+            return f'any unit of process {process_num} is not between steps {low_step} and {high_step}'
+    else:
+        return f'{unit_count} {comp_state[is_greater]} units of process {process_num} is between steps {low_step} and {high_step}'
+    
 
 
 def parse_process_either_step(process_num,
@@ -1027,6 +1032,40 @@ def eos_49(eos_mod_1=None,
     pass
 
 
+def eos_70(eos_mod_1=None,
+           eos_mod_2=None,
+           eos_mod_3=None,
+           eos_mod_4=None,
+           eos_mod_5=None,
+           eos_mod_6=None,
+           eos_mod_7=None,
+           eos_mod_8=None):
+    '''End of Step 70: The analog varible is greater than the analog preset
+    or a bit (binary or real I/O) is in a specified state and time in step is great than the preset value
+    Inputs:
+        eos_mod_1
+        eos_mod_4
+        eos_mod_5
+        eos_mod_6
+        eos_mod_7
+        eos_mod_8
+    Outputs:
+        A formatted string'''
+
+    # Discrete address
+    io = parse_discrete_io(word_num=eos_mod_4,
+                           bit_num=eos_mod_5,
+                           state_num=eos_mod_6)
+    input_text = f'''{io.address} is {io.state}'''
+
+    # Time Values
+    time_text = parse_time(eos_mod_7)
+
+    analog_text = parse_analog(analog_num=eos_mod_1, greater_than=True, analog_preset=eos_mod_8)
+
+    return f'''{analog_text} or {time_text} and {input_text}.'''
+
+
 def eos_73(eos_mod_1=None,
            eos_mod_2=None,
            eos_mod_3=None,
@@ -1237,9 +1276,22 @@ def eos_96(eos_mod_1=None,
     process_text = parse_process_step_range(process_num=eos_mod_5, low_step=eos_mod_6, high_step=eos_mod_7,in_range=(~eos_mod_4 & 1))
     xfer_to = parse_xfer_on(state_num=(eos_mod_4 << 1))
     step_text, step_num = parse_step_transition(step_num=eos_mod_8, keepxfr=True)
-    
 
     return f'{input_text} then {step_text} or if {process_text}. Step will {xfer_to}.'
+
+
+def eos_98(eos_mod_1=None,
+           eos_mod_2=None,
+           eos_mod_3=None,
+           eos_mod_4=None,
+           eos_mod_5=None,
+           eos_mod_6=None,
+           eos_mod_7=None,
+           eos_mod_8=None):
+    process_text1 = parse_process_step_range(process_num=eos_mod_1, low_step=eos_mod_2, high_step=eos_mod_3, unit_count=eos_mod_8, is_greater=eos_mod_4)
+    process_text2 = parse_process_step_range(process_num=eos_mod_5, low_step=eos_mod_6, high_step=eos_mod_7, unit_count=eos_mod_8, is_greater=eos_mod_4)
+
+    return f'{process_text1} or {process_text2}.'
 
 
 def eos_resolve(eos_type, eos_mod_1, eos_mod_2, eos_mod_3, eos_mod_4,
