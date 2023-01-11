@@ -73,11 +73,16 @@ class TruthtableDB():
                 while (seq[0] != next_sn):
                     lookup_val = seq[len(seq) - tick]
                     eos_info = list(self._df.loc[self._df.index[list(mod)], str(lookup_val)])
-                    branch_to = eos_resolve(*eos_info)[2]
+                    eos_step_desc_english, step_not_found, branch_steps = eos_resolve(*eos_info)
                 
-                    if bool(branch_to) is True:
-                        tick = len(branch_to)
-                        seq.extend(branch_to)
+                    if bool(branch_steps.branch_to) is True and not branch_steps.keepxfr:
+                        tick = len(branch_steps.branch_to)
+                        seq.extend(branch_steps.branch_to)
+                    elif bool(branch_steps.branch_to) is True and branch_steps.keepxfr:
+                        tick = len(branch_steps.branch_to)
+                        seq.extend(branch_steps.branch_to)
+                        next_sn = self._df.loc[self._df.index[seq_r], str(lookup_val)]
+                        seq.append(next_sn)
                     else:
                         next_sn = self._df.loc[self._df.index[seq_r], str(lookup_val)]
                         seq.append(next_sn)
@@ -105,22 +110,32 @@ class TruthtableDB():
     def get_next_steps(self):
         mod, seqrn, step_name_r, first_device_r = self.get_tt_rows()
         next_steps = []
-        i = -1
-        for lookup_val in self._seq:
-            i = i + 1
-            eos_info = list(self._df.loc[self._df.index[list(mod)], str(lookup_val)])
-            eos_step_desc_english, step_not_found, branch_to = eos_resolve(*eos_info)
 
-            if len(branch_to) == 1 and branch_to[0] != 0:
-                next_steps.append(str(branch_to[0]))
-            elif len(branch_to) > 1:
-                branch_text = f'{branch_to[0]}'
-                for i in range(len(branch_to)-1):
-                    branch_text = branch_text + f' or {branch_to[i+1]}'
+        for idx, lookup_val in enumerate(self._seq):
+  
+            eos_info = list(self._df.loc[self._df.index[list(mod)], str(lookup_val)])
+            eos_step_desc_english, step_not_found, branch_steps = eos_resolve(*eos_info)
+
+            if bool(branch_steps.branch_to) is True:
+                branch_text = ' or '.join(str(i) for i in branch_steps.branch_to)
+                if branch_steps.keepxfr:
+                    xfrstep = self._df.loc[self._df.index[seqrn.seqrow[seqrn.seqnum.index(self._seq_num_lst[idx])]], str(lookup_val)]
+                    branch_text = f'{branch_text} or {xfrstep}'
                 next_steps.append(branch_text)
             else:
-                next_sn = self._df.loc[self._df.index[seqrn.seqrow[seqrn.seqnum.index(self._seq_num_lst[i])]], str(lookup_val)]
+                next_sn = self._df.loc[self._df.index[seqrn.seqrow[seqrn.seqnum.index(self._seq_num_lst[idx])]], str(lookup_val)]
                 next_steps.append(str(next_sn))
+
+            # if len(branch_steps.branch_to) == 1:
+            #     next_steps.append(str(branch_to[0]))
+            # elif len(branch_to) > 1:
+            #     branch_text = f'{branch_to[0]}'
+            #     for i in range(len(branch_to)-1):
+            #         branch_text = branch_text + f' or {branch_to[i+1]}'
+            #     next_steps.append(branch_text)
+            # else:
+            #     next_sn = self._df.loc[self._df.index[seqrn.seqrow[seqrn.seqnum.index(self._seq_num_lst[idx])]], str(lookup_val)]
+            #     next_steps.append(str(next_sn))
 
         return next_steps
 

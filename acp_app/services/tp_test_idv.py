@@ -3,6 +3,7 @@
 
 from truthtable_parser import TruthtableDB
 import pandas as pd
+from pathlib import Path
 
 #seqs = pd.DataFrame()
 #seq_num = 4
@@ -144,16 +145,25 @@ import pandas as pd
 #     seq_val = seq_num
 #     df = parse_truthtable(tt, seq_val)
 #     seqs[tt] = df['Step Number']
+all_tts = []
+path = 'C:/Users/pjordan/TruthtablesTest'
 
-result = TruthtableDB('C:/Users/pjordan/Truthtables/ref1/41IXA.xls')
+files = Path(path).glob('**/*.xls')
+for file in files:
+    truthtable = TruthtableDB(file)
+    all_tts.append(truthtable.tt)
+tt_master = pd.concat(all_tts)
 
-ttx = result._tt_name_lst
-sqnumx = result._seq_num_lst
-snx = result._seq
-tt = result.tt
-trudev = result._true_devices
 
-test = pd.DataFrame(list(zip(ttx, sqnumx, snx)), columns=['Truthtable', 'Sequence Number','Step Number'])
+#result = TruthtableDB('C:/Users/pjordan/Truthtables/ref1/41IXA.xls')
+
+#ttx = result._tt_name_lst
+#sqnumx = result._seq_num_lst
+#snx = result._seq
+#tt = result.tt
+#trudev = result._true_devices
+
+#test = pd.DataFrame(list(zip(ttx, sqnumx, snx)), columns=['Truthtable', 'Sequence Number','Step Number'])
 
 
 #test_ixa()
