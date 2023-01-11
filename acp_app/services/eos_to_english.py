@@ -1158,6 +1158,20 @@ def eos_75(eos_mod_1=None,
     return f'{analog_text1} then {step_text1} or if {analog_text2} then {step_text2}.'
 
 
+def eos_76(eos_mod_1=None,
+           eos_mod_2=None,
+           eos_mod_3=None,
+           eos_mod_4=None,
+           eos_mod_5=None,
+           eos_mod_6=None,
+           eos_mod_7=None,
+           eos_mod_8=None):
+    analog_text1 = parse_analog(analog_num=eos_mod_1, greater_than=eos_mod_2, analog_preset=eos_mod_7)
+    analog_text2 = parse_analog(analog_num=eos_mod_3, greater_than=eos_mod_4, analog_preset=eos_mod_8)
+
+    return f'{analog_text1} and {analog_text2}.'
+
+
 def eos_77(eos_mod_1=None,
            eos_mod_2=None,
            eos_mod_3=None,
