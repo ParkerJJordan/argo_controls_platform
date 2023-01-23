@@ -196,7 +196,3 @@ class TruthtableDB():
         #                                 'Open/On', 'Closed/Off'])
         
         return parsed_tt
-
-def filter_tt(df, tt_name, seq_num):
-
-    return
