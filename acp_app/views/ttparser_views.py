@@ -33,7 +33,7 @@ def ttparse(search_name, search_num):
     try:
         tt_table = session.query(Truthtables) \
         .filter(Truthtables.name.like(ttname),
-                Truthtables.seq.like(seqnum)).all()
+                Truthtables.seq.like(seqnum)).all() #Properly filter out?
     except:
         SortError = True
         tt_table = pd.DataFrame()
