@@ -63,9 +63,9 @@ class Truthtables(db.Model):
     __tablename__ = 'tt_master'
     
     index = db.Column(db.Integer, primary_key=True) #Used to keep things in order?
-    name = db.Column(db.String(64), unique=True) #List of '41IXA', '41IXB', '41IXC'... etc unique?
-
+    name = db.Column(db.String(64), unique=True) #List of '41IXA', '41IXB', '41IXC'... etc; unique?
     seq = db.Column(db.String(64)) #String? Interger?
+
     step_num = db.Column(db.Integer) #String? Interger?
     step_name = db.Column(db.String(64))
     eos_cond = db.Column(db.String(64))
