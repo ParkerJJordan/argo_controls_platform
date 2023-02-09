@@ -62,7 +62,8 @@ def ttparse(search_name, search_num):
 @bp.cli.command('init')
 def load_truthtable_db():
     all_tts = []
-    path = f'acp_app/data/raw/gcc'
+    #path = f'acp_app/data/raw/gcc'
+    path = f'C:/Users/pjordan/TruthtablesTest/ref1'
 
     files = Path(path).glob('**/*.xls')
     for file in files:
