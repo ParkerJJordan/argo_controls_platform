@@ -27,13 +27,15 @@ def ttparse(search_name, search_num):
     ttname = search_name
     seqnum = search_num
 
-    Session = sessionmaker(bind=db.engine)
-    session = Session()
-
+    # Session = sessionmaker(bind=db.engine)
+    # session = Session()
+    
+    df = Truthtables
     try:
-        tt_table = session.query(Truthtables) \
-        .filter(Truthtables.name.like(ttname),
-                Truthtables.seq.like(seqnum)).all() #Properly filter out?
+        # tt_table = session.query(Truthtables) \
+        # .filter(Truthtables.name.like(ttname),
+        #         Truthtables.seq.like(seqnum)).all() #Properly filter out?
+        tt_table = df.query(f'Truthtable==@ttname and `Sequence Number`==@seqnum')        
     except:
         SortError = True
         tt_table = pd.DataFrame()
