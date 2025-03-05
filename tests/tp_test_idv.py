@@ -161,7 +161,7 @@ def test_ix49z():
 #test_ix49x() #Seq 5 doesn't work
 #test_ix42x()
 #test_ix1y()
-#test_ix2y() #Seq 3 doesn't work. Seq 5 doesn't work (error '40')
+#test_ix2y() #Seq 3 doesn't work. Sq 5 doesn't work (error '40'e)
 #test_ix3y()
 #test_ix49y()
 #test_ix1z()

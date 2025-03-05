@@ -12,8 +12,8 @@ Required Parameters:
 import numpy as np
 import pandas as pd
 from collections import namedtuple
-from acp_app.services.eos_to_english import eos_resolve
-#from eos_to_english import eos_resolve
+#from acp_app.services.eos_to_english import eos_resolve
+from eos_to_english import eos_resolve
 from pathlib import Path
 
 class TruthtableDB():
